@@ -1,0 +1,25 @@
+{
+	"name": "ds_passenger_silver",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "linkedservice_delta_Lake",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "DimPassenger.txt",
+				"folderPath": "onperm",
+				"fileSystem": "bronze"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

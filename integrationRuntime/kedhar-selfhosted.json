@@ -1,0 +1,6 @@
+{
+	"name": "kedhar-selfhosted",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}

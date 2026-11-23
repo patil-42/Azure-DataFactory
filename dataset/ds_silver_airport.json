@@ -1,0 +1,21 @@
+{
+	"name": "ds_silver_airport",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "linkedservice_delta_Lake",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "DimAirport.json",
+				"folderPath": "github",
+				"fileSystem": "bronze"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

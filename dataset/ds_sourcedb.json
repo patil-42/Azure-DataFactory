@@ -1,0 +1,13 @@
+{
+	"name": "ds_sourcedb",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sourcelink",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

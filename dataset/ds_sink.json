@@ -1,0 +1,22 @@
+{
+	"name": "ds_sink",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "linkedservice_delta_Lake",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "firstcopy.parquet",
+				"folderPath": "onprem",
+				"fileSystem": "bronze"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

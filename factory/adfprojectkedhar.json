@@ -1,0 +1,16 @@
+{
+	"name": "adfprojectkedhar",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true,
+			"isExplicitlySet": false
+		}
+	},
+	"location": "southeastasia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "fd23489c-a2f0-4539-851f-116f8eb52489",
+		"tenantId": "f82df495-2945-452d-8d40-9fc06d77f082"
+	}
+}

@@ -1,0 +1,29 @@
+{
+	"name": "ds_sink_onperm_csv",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "linkedservice_delta_Lake",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"p_file_name": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "onperm",
+				"fileSystem": "bronze"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

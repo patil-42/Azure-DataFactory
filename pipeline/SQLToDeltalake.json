@@ -1,0 +1,204 @@
+{
+	"name": "SQLToDeltalake",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copysqldata",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Lookuplastload",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					},
+					{
+						"activity": "latestload",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "select * from dbo.FactBookings\nwhere booking_date>'@{activity('Lookuplastload').output.firstRow.lastload}'\nAND booking_date<='@{activity('latestload').output.firstRow.latestload}'",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_sourcedb",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "dssql_sink",
+						"type": "DatasetReference"
+					}
+				]
+			},
+			{
+				"name": "Lookuplastload",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"dataset": {
+						"referenceName": "lasload_json",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "latestload",
+				"type": "Lookup",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"sqlReaderQuery": {
+							"value": "select max(booking_date) as latestload\nfrom dbo.FactBookings",
+							"type": "Expression"
+						},
+						"queryTimeout": "02:00:00",
+						"partitionOption": "None"
+					},
+					"dataset": {
+						"referenceName": "ds_sourcedb",
+						"type": "DatasetReference"
+					}
+				}
+			},
+			{
+				"name": "watermark",
+				"type": "Copy",
+				"dependsOn": [
+					{
+						"activity": "Copysqldata",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "JsonSource",
+						"additionalColumns": [
+							{
+								"name": "lastload",
+								"value": {
+									"value": "@activity('latestload').output.firstRow.latestload",
+									"type": "Expression"
+								}
+							}
+						],
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "JsonReadSettings"
+						}
+					},
+					"sink": {
+						"type": "JsonSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "JsonWriteSettings"
+						}
+					},
+					"enableStaging": false
+				},
+				"inputs": [
+					{
+						"referenceName": "ds_emptyJson",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "ds_lookuplastload",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"variables": {
+			"v_now": {
+				"type": "String"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2026-11-21T11:48:02Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

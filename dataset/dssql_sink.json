@@ -1,0 +1,21 @@
+{
+	"name": "dssql_sink",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "linkedservice_delta_Lake",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "sql",
+				"fileSystem": "monitor"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

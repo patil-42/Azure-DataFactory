@@ -1,0 +1,17 @@
+{
+	"name": "FileServer_selfhost",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "FileServer",
+		"typeProperties": {
+			"host": "C:\\KedharOnPermFiles",
+			"userId": "KEDHAR\\adfuser",
+			"encryptedCredential": "eyJDcmVkZW50aWFsSWQiOiI0YmJmZTIyZS1lMjIzLTRiMWYtODAzZC1lNGFkZWU2Y2YyYmIiLCJWZXJzaW9uIjoiMi4wIiwiQ2xhc3NUeXBlIjoiTWljcm9zb2Z0LkRhdGFQcm94eS5Db3JlLkludGVyU2VydmljZURhdGFDb250cmFjdC5DcmVkZW50aWFsU1UwNkNZMTQifQ=="
+		},
+		"connectVia": {
+			"referenceName": "kedhar-selfhosted",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}
